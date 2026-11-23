@@ -1,0 +1,14 @@
+# podman-compose / docker compose equivalent of scripts/run.sh
+# (the CDI GPU device is podman-specific; scripts/run.sh is the supported path).
+services:
+  g1-sim:
+    image: g1-sim:dev
+    build: { context: ., dockerfile: docker/Dockerfile }
+    network_mode: host
+    security_opt: ["label=disable"]
+    devices: ["nvidia.com/gpu=all"]
+    environment:
+      HEADLESS: "${HEADLESS:-0}"
+      DISPLAY: "${DISPLAY:-}"
+      NVIDIA_DRIVER_CAPABILITIES: all
+    volumes: ["/tmp/.X11-unix:/tmp/.X11-unix"]
